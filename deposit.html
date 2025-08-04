@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deposit - 1PKR.XYZ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* --- All CSS from your homepage is preserved here --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --cream: #F2EDD1;
+            --peach: #F9CB99;
+            --teal: #6B9B8A;
+            --navy: #280A3E;
+        }
+
+        /* Dark Mode (Default) */
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2d2d2d;
+            --bg-tertiary: #3a3a3a;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --text-muted: #888;
+            --border: #404040;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            --shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Light Mode */
+        [data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --bg-tertiary: #e9ecef;
+            --text-primary: #333;
+            --text-secondary: #666;
+            --text-muted: #888;
+            --border: #e0e0e0;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-size: 14px;
+            line-height: 1.4;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            height: 56px;
+            transition: all 0.3s ease;
+        }
+
+        .top-bar-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            height: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .top-bar-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 18px;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        .top-bar-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            color: var(--text-primary);
+            transition: all 0.2s;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .btn {
+            background: var(--peach);
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+            color: var(--navy);
+        }
+
+        .btn:hover {
+            background: var(--teal);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .main-content {
+            margin-top: 56px;
+        }
+
+        /* --- DEPOSIT PAGE STYLES --- */
+        .deposit-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: calc(100vh - 56px);
+            padding: 20px;
+        }
+
+        .deposit-card {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: var(--shadow-hover);
+            border: 1px solid var(--border);
+            width: 100%;
+            max-width: 480px;
+        }
+
+        .deposit-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .deposit-header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .deposit-header p {
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+
+        /* Wallet Selection */
+        .wallet-selection {
+            margin-bottom: 24px;
+        }
+
+        .wallet-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .wallet-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: var(--bg-primary);
+        }
+
+        .wallet-option:hover {
+            border-color: var(--teal);
+        }
+
+        .wallet-option.selected {
+            border-color: var(--teal);
+            background: var(--bg-tertiary);
+        }
+
+        .wallet-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: white;
+        }
+
+        .wallet-icon.jazzcash {
+            background: #FF6B35;
+        }
+
+        .wallet-icon.easypaisa {
+            background: #00A651;
+        }
+
+        .wallet-info {
+            flex: 1;
+        }
+
+        .wallet-name {
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--text-primary);
+        }
+
+        .wallet-desc {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .wallet-check {
+            color: var(--teal);
+            font-size: 16px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .wallet-option.selected .wallet-check {
+            opacity: 1;
+        }
+
+        /* Amount Selection */
+        .amount-selection {
+            margin-bottom: 24px;
+        }
+
+        .amount-presets {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .amount-preset {
+            position: relative;
+            padding: 12px 8px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            background: var(--bg-primary);
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .amount-preset:hover {
+            border-color: var(--teal);
+        }
+
+        .amount-preset.selected {
+            border-color: var(--teal);
+            background: var(--bg-tertiary);
+        }
+
+        .amount-preset.selected::after {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            background: var(--teal);
+            color: white;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+        }
+
+        .amount-value {
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--text-primary);
+        }
+
+        .amount-offer {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            background: var(--peach);
+            color: var(--navy);
+            font-size: 9px;
+            font-weight: 600;
+            padding: 2px 4px;
+            border-radius: 4px;
+            line-height: 1;
+        }
+
+        /* Custom Amount */
+        .custom-amount {
+            margin-bottom: 24px;
+        }
+
+        .amount-input-group {
+            position: relative;
+        }
+
+        .amount-input {
+            width: 100%;
+            padding: 12px 40px 12px 16px;
+            border-radius: 8px;
+            border: 2px solid var(--border);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .amount-input:focus {
+            outline: none;
+            border-color: var(--teal);
+            box-shadow: 0 0 0 3px rgba(107, 155, 138, 0.3);
+        }
+
+        .currency-symbol {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        /* Phone Input Step */
+        .phone-input-section {
+            display: none;
+            margin-bottom: 24px;
+        }
+
+        .phone-input-section.active {
+            display: block;
+        }
+
+        .phone-input {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: 2px solid var(--border);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .phone-input:focus {
+            outline: none;
+            border-color: var(--teal);
+            box-shadow: 0 0 0 3px rgba(107, 155, 138, 0.3);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-full {
+            flex: 1;
+            padding: 14px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 2px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-primary);
+            border-color: var(--teal);
+        }
+
+        .btn-primary {
+            background: var(--teal);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--navy);
+            transform: translateY(-1px);
+        }
+
+        .btn-primary:disabled {
+            background: var(--text-muted);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Result Messages */
+        .result-message {
+            display: none;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .result-message.active {
+            display: block;
+        }
+
+        .result-success {
+            background: rgba(0, 166, 81, 0.1);
+            border: 1px solid #00A651;
+            color: #00A651;
+        }
+
+        .result-error {
+            background: rgba(220, 53, 69, 0.1);
+            border: 1px solid #dc3545;
+            color: #dc3545;
+        }
+
+        /* Hide steps */
+        .step {
+            display: none;
+        }
+
+        .step.active {
+            display: block;
+        }
+
+        /* Back button */
+        .back-btn {
+            display: none;
+            align-items: center;
+            gap: 6px;
+            color: var(--teal);
+            font-size: 13px;
+            cursor: pointer;
+            margin-bottom: 16px;
+            background: none;
+            border: none;
+        }
+
+        .back-btn.active {
+            display: flex;
+        }
+
+        .back-btn:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 480px) {
+            .deposit-card {
+                padding: 24px 20px;
+            }
+
+            .amount-presets {
+                grid-template-columns: repeat(5, 1fr);
+            }
+
+            .wallet-options {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="top-bar">
+        <div class="top-bar-content">
+            <div class="top-bar-left">
+                <a href="./index.html" class="logo">1PKR.XYZ</a>
+            </div>
+            <div class="top-bar-right">
+                <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <a href="./index.html" class="btn">Back to Home</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content deposit-container">
+        <div class="deposit-card">
+            <div class="deposit-header">
+                <h1>Deposit Funds</h1>
+                <p>Add money to your account using mobile wallets</p>
+            </div>
+
+            <button class="back-btn" id="backBtn" onclick="goBack()">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+
+            <!-- Step 1: Amount Selection -->
+            <div class="step active" id="step1">
+                <!-- Wallet Selection -->
+                <div class="wallet-selection">
+                    <div class="section-title">Select Wallet</div>
+                    <div class="wallet-options">
+                        <div class="wallet-option selected" data-wallet="jazzcash">
+                            <div class="wallet-icon jazzcash">
+                                <i class="fas fa-mobile-alt"></i>
+                            </div>
+                            <div class="wallet-info">
+                                <div class="wallet-name">JazzCash</div>
+                                <div class="wallet-desc">Mobile Wallet</div>
+                            </div>
+                            <div class="wallet-check">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                        </div>
+                        <div class="wallet-option" data-wallet="easypaisa">
+                            <div class="wallet-icon easypaisa">
+                                <i class="fas fa-credit-card"></i>
+                            </div>
+                            <div class="wallet-info">
+                                <div class="wallet-name">EasyPaisa</div>
+                                <div class="wallet-desc">Mobile Wallet</div>
+                            </div>
+                            <div class="wallet-check">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Amount Selection -->
+                <div class="amount-selection">
+                    <div class="section-title">Select Amount</div>
+                    <div class="amount-presets">
+                        <div class="amount-preset selected" data-amount="100">
+                            <div class="amount-value">100</div>
+                        </div>
+                        <div class="amount-preset" data-amount="200">
+                            <div class="amount-offer">+5%</div>
+                            <div class="amount-value">200</div>
+                        </div>
+                        <div class="amount-preset" data-amount="300">
+                            <div class="amount-value">300</div>
+                        </div>
+                        <div class="amount-preset" data-amount="500">
+                            <div class="amount-offer">+10%</div>
+                            <div class="amount-value">500</div>
+                        </div>
+                        <div class="amount-preset" data-amount="1000">
+                            <div class="amount-value">1,000</div>
+                        </div>
+                        <div class="amount-preset" data-amount="2000">
+                            <div class="amount-offer">+15%</div>
+                            <div class="amount-value">2,000</div>
+                        </div>
+                        <div class="amount-preset" data-amount="5000">
+                            <div class="amount-value">5,000</div>
+                        </div>
+                        <div class="amount-preset" data-amount="10000">
+                            <div class="amount-offer">+20%</div>
+                            <div class="amount-value">10,000</div>
+                        </div>
+                        <div class="amount-preset" data-amount="20000">
+                            <div class="amount-value">20,000</div>
+                        </div>
+                        <div class="amount-preset" data-amount="30000">
+                            <div class="amount-offer">+25%</div>
+                            <div class="amount-value">30,000</div>
+                        </div>
+                        <div class="amount-preset" data-amount="50000">
+                            <div class="amount-offer">+30%</div>
+                            <div class="amount-value">50,000</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Custom Amount -->
+                <div class="custom-amount">
+                    <div class="section-title">Or Enter Custom Amount</div>
+                    <div class="amount-input-group">
+                        <input type="number" class="amount-input" id="customAmount" placeholder="Enter amount" value="100" min="100">
+                        <span class="currency-symbol">PKR</span>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn-full btn-primary" onclick="nextStep()">
+                        Next <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 2: Phone Input -->
+            <div class="step" id="step2">
+                <div class="phone-input-section active">
+                    <div class="section-title">Enter Phone Number</div>
+                    <p style="color: var(--text-secondary); font-size: 12px; margin-bottom: 12px;">
+                        Enter your <span id="selectedWalletName">JazzCash</span> mobile number
+                    </p>
+                    <input type="tel" class="phone-input" id="phoneNumber" placeholder="03xxxxxxxxx" maxlength="11">
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn-full btn-secondary" onclick="goBack()">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </button>
+                    <button class="btn-full btn-primary" onclick="processDeposit()" id="depositBtn">
+                        Deposit ₨<span id="finalAmount">100</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 3: Processing & Result -->
+            <div class="step" id="step3">
+                <div class="result-message" id="resultMessage"></div>
+                
+                <div class="action-buttons">
+                    <button class="btn-full btn-primary" onclick="resetDeposit()" style="display: none;" id="resetBtn">
+                        Make Another Deposit
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentTheme = 'dark';
+        let currentStep = 1;
+        let selectedWallet = 'jazzcash';
+        let selectedAmount = 100;
+        let isProcessing = false;
+
+        // Initialize theme
+        document.documentElement.setAttribute('data-theme', currentTheme);
+
+        function toggleTheme() {
+            currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            const themeToggle = document.querySelector('.theme-toggle i');
+            themeToggle.className = currentTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+            localStorage.setItem('theme', currentTheme);
+        }
+
+        // Load saved theme preference
+        window.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            currentTheme = savedTheme;
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            const themeToggle = document.querySelector('.theme-toggle i');
+            themeToggle.className = currentTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        });
+
+        // Wallet selection
+        document.querySelectorAll('.wallet-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.wallet-option').forEach(o => o.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedWallet = this.dataset.wallet;
+                updateSelectedWalletName();
+            });
+        });
+
+        // Amount preset selection
+        document.querySelectorAll('.amount-preset').forEach(preset => {
+            preset.addEventListener('click', function() {
+                document.querySelectorAll('.amount-preset').forEach(p => p.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedAmount = parseInt(this.dataset.amount);
+                document.getElementById('customAmount').value = selectedAmount;
+                updateFinalAmount();
+            });
+        });
+
+        // Custom amount input
+        document.getElementById('customAmount').addEventListener('input', function() {
+            selectedAmount = parseInt(this.value) || 100;
+            if (selectedAmount < 100) {
+                selectedAmount = 100;
+                this.value = 100;
+            }
+            
+            // Deselect all presets if custom amount doesn't match any
+            const matchingPreset = document.querySelector(`[data-amount="${selectedAmount}"]`);
+            document.querySelectorAll('.amount-preset').forEach(p => p.classList.remove('selected'));
+            if (matchingPreset) {
+                matchingPreset.classList.add('selected');
+            }
+            updateFinalAmount();
+        });
+
+        function updateSelectedWalletName() {
+            const walletNames = {
+                'jazzcash': 'JazzCash',
+                'easypaisa': 'EasyPaisa'
+            };
+            document.getElementById('selectedWalletName').textContent = walletNames[selectedWallet];
+        }
+
+        function updateFinalAmount() {
+            document.getElementById('finalAmount').textContent = selectedAmount.toLocaleString();
+        }
+
+        function nextStep() {
+            if (currentStep === 1) {
+                currentStep = 2;
+                showStep(2);
+                document.getElementById('backBtn').classList.add('active');
+            }
+        }
+
+        function goBack() {
+            if (currentStep > 1) {
+                currentStep--;
+                showStep(currentStep);
+                if (currentStep === 1) {
+                    document.getElementById('backBtn').classList.remove('active');
+                }
+            }
+        }
+
+        function showStep(step) {
+            document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+            document.getElementById(`step${step}`).classList.add('active');
+        }
+
+        function processDeposit() {
+            const phoneNumber = document.getElementById('phoneNumber').value.trim();
+            
+            // Validate phone number
+            if (!phoneNumber || phoneNumber.length !== 11 || !phoneNumber.startsWith('03')) {
+                alert('Please enter a valid 11-digit mobile number starting with 03');
+                return;
+            }
+
+            if (isProcessing) return;
+            isProcessing = true;
+
+            const depositBtn = document.getElementById('depositBtn');
+            depositBtn.disabled = true;
+            depositBtn.innerHTML = '<div class="loading-spinner"></div> Processing...';
+
+            // Show processing step
+            currentStep = 3;
+            showStep(3);
+            document.getElementById('backBtn').classList.remove('active');
+
+            const resultMessage = document.getElementById('resultMessage');
+            resultMessage.textContent = 'Processing your deposit request...';
+            resultMessage.className = 'result-message active';
+            resultMessage.style.background = 'var(--bg-tertiary)';
+            resultMessage.style.border = '1px solid var(--border)';
+            resultMessage.style.color = 'var(--text-primary)';
+
+            // Simulate processing delay
+            setTimeout(() => {
+                // Simulate random success/failure (80% success rate)
+                const isSuccess = Math.random() > 0.2;
+                
+                if (isSuccess) {
+                    resultMessage.innerHTML = `
+                        <i class="fas fa-check-circle" style="font-size: 24px; margin-bottom: 8px; display: block;"></i>
+                        <strong>Deposit Successful!</strong><br>
+                        ₨${selectedAmount.toLocaleString()} has been added to your account via ${selectedWallet === 'jazzcash' ? 'JazzCash' : 'EasyPaisa'}.
+                    `;
+                    resultMessage.className = 'result-message result-success active';
+                } else {
+                    resultMessage.innerHTML = `
+                        <i class="fas fa-times-circle" style="font-size: 24px; margin-bottom: 8px; display: block;"></i>
+                        <strong>Deposit Failed</strong><br>
+                        Transaction could not be completed. Please try again or contact support.
+                    `;
+                    resultMessage.className = 'result-message result-error active';
+                }
+
+                document.getElementById('resetBtn').style.display = 'block';
+                isProcessing = false;
+            }, 3000);
+        }
+
+        function resetDeposit() {
+            currentStep = 1;
+            showStep(1);
+            document.getElementById('backBtn').classList.remove('active');
+            document.getElementById('phoneNumber').value = '';
+            document.getElementById('depositBtn').disabled = false;
+            document.getElementById('depositBtn').innerHTML = 'Deposit ₨<span id="finalAmount">' + selectedAmount.toLocaleString() + '</span>';
+            document.getElementById('resetBtn').style.display = 'none';
+            document.getElementById('resultMessage').classList.remove('active');
+            updateFinalAmount();
+        }
+
+        // Format phone number input
+        document.getElementById('phoneNumber').addEventListener('input', function() {
+            let value = this.value.replace(/\D/g, ''); // Remove non-digits
+            if (value.length > 11) {
+                value = value.slice(0, 11);
+            }
+            this.value = value;
+        });
+    </script>
+</body>
+
+</html>
